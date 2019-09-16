@@ -34,15 +34,17 @@ class FingerBoardApp {
 
   initElements() {
     this.el.innerHTML = `
-      <div class="main-contanier">
+      <div class="fingerboard-app">
         <div class="message"></div>
-        <div class="question-area">
-          <span class="quetsion-label">問題： </span>
-          <span class="position"></span>
-        </div>
-        <div class="answer-area">
-          <span class="answer-lable">正解： </span>
-          <span class="note"></span>
+        <div class="question-answer-area">
+          <div class="question-area">
+            <span class="quetsion-label">問題： </span>
+            <span class="position"></span>
+          </div>
+          <div class="answer-area">
+            <span class="answer-lable">正解： </span>
+            <span class="note"></span>
+          </div>
         </div>
         <button type="button" class="next-btn"></button>
       </div>
