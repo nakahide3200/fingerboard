@@ -11,6 +11,15 @@ class FingerBoardApp {
     ]
   }
 
+  static get MESSAGES() {
+    return [
+      '明日のギターヒーローは君だ！',
+      '明日のロックスターは君だ！',
+      '明日のジャズの帝王は君だ！',
+      '明日の三大ギタリストは君だ！'
+    ]
+  }
+
   constructor(selector) {
     this.el = document.querySelector(selector);
     if (!this.el) {
@@ -26,6 +35,7 @@ class FingerBoardApp {
   initElements() {
     this.el.innerHTML = `
       <div class="main-contanier">
+        <div class="message"></div>
         <div class="question-area">
           <span class="quetsion-label">問題： </span>
           <span class="position"></span>
@@ -40,6 +50,8 @@ class FingerBoardApp {
 
     this.questionAreaEl = this.el.querySelector('.question-area');
     this.answerAreaEl = this.el.querySelector('.answer-area');
+
+    this.messageEl = this.el.querySelector('.message');
 
     this.positionEl = this.el.querySelector('.position');
     this.noteEl = this.el.querySelector('.note');
@@ -59,6 +71,7 @@ class FingerBoardApp {
   }
 
   showQuestion() {
+    this.setMessage();
     this.createQuetsion();
     this.answerAreaEl.style.visibility ='hidden';
     this.nextButton.innerHTML = '正解を見る';
@@ -80,5 +93,9 @@ class FingerBoardApp {
 
     this.positionEl.innerHTML = position;
     this.noteEl.innerHTML = note;
+  }
+
+  setMessage() {
+    this.messageEl.innerHTML = FingerBoardApp.MESSAGES[Math.floor( Math.random() * FingerBoardApp.MESSAGES.length )]
   }
 }
