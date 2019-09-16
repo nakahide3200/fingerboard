@@ -1,9 +1,3 @@
-.fingerboard-app .next-btn {
-  cursor: pointer;
-  width: 200px;
-  font-size: 1.25rem;
-}
-
 .fingerboard-app .message {
   margin-bottom: 1rem;
 }
@@ -11,4 +5,10 @@
 .fingerboard-app .question-answer-area {
   font-size: 1.25rem;
   margin-bottom: 1rem;
+}
+
+.fingerboard-app .next-btn {
+  cursor: pointer;
+  width: 200px;
+  font-size: 1.25rem;
 }
