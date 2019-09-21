@@ -1,4 +1,4 @@
-class FingerBoardApp {
+class FingerboardApp {
   static get FINGERBOARD_NOTES() {
     return [
       [],
@@ -41,6 +41,7 @@ class FingerBoardApp {
             <span class="quetsion-label">問題： </span>
             <span class="position"></span>
           </div>
+          <canvas class="fingerboard-image"></canvas>
           <div class="answer-area">
             <span class="answer-lable">正解： </span>
             <span class="note"></span>
@@ -62,6 +63,8 @@ class FingerBoardApp {
     this.nextButton.onclick = (e) => {
       this.doNext();
     }
+
+    this.fingerboardImage = new FingerboardImage('.fingerboard-image');
   }
 
   doNext() {
@@ -91,13 +94,120 @@ class FingerBoardApp {
     const fretNo = Math.floor( Math.random() * 13 ); // 0 - 12
 
     const position = `${stringNo}弦 ${fretNo}F`;
-    const note = FingerBoardApp.FINGERBOARD_NOTES[stringNo][fretNo];
+    const note = FingerboardApp.FINGERBOARD_NOTES[stringNo][fretNo];
 
     this.positionEl.innerHTML = position;
     this.noteEl.innerHTML = note;
+
+    this.fingerboardImage.clearPostion();
+    this.fingerboardImage.drawPostion(stringNo, fretNo);
   }
 
   setMessage() {
-    this.messageEl.innerHTML = FingerBoardApp.MESSAGES[Math.floor( Math.random() * FingerBoardApp.MESSAGES.length )]
+    this.messageEl.innerHTML = FingerboardApp.MESSAGES[Math.floor( Math.random() * FingerboardApp.MESSAGES.length )]
+  }
+}
+
+class FingerboardImage {
+  constructor(selector) {
+    this.canvas = document.querySelector(selector);
+    if (!this.canvas) {
+      console.error('Could not find the specified element: ' + selector);
+      return;
+    }
+
+    this.ctx = this.canvas.getContext('2d');
+
+    this.initParams();
+    this.drawFingerboard();
+  }
+
+  initParams() {
+    this.cellWidth = 28;
+    this.cellHeight = 20;
+
+    this.marginTop = 20;
+    this.marginBottom = 20;
+    this.marginLeft = 35;
+    this.marginRight = 20;
+
+    this.dotRadius = 5;
+    this.dotColor = 'black'
+
+    this.postionRadius = 8;
+    this.postionColor = 'red'
+  }
+
+  drawFingerboard() {
+    const fingerboardWidth = this.cellWidth * 12;
+    const fingerboardHeight = this.cellHeight * 5;
+
+    const canvasWidth = fingerboardWidth + this.marginLeft + this.marginRight;
+    const canvasHeight = fingerboardHeight + this.marginTop + this.marginBottom;
+
+    this.canvas.width = canvasWidth;
+    this.canvas.height = canvasHeight;
+
+    this.ctx.lineWidth = 1;
+
+    // draw strings
+    for (let i = 0; i < 6; i ++) {
+      this.ctx.strokeRect(this.marginLeft, this.marginTop + this.cellHeight * i, fingerboardWidth, 0);
+    }
+
+    // draw frets
+    for (let i = 0; i < 13; i ++) {
+      this.ctx.strokeRect(this.marginLeft + this.cellWidth * i, this.marginTop, 0, fingerboardHeight);
+    }
+
+    this.drawDots();
+  }
+
+  drawDots() {
+    [3, 5, 7, 9].forEach((fret) => {
+      this.drawSingleDot(fret);
+    });
+
+    [12].forEach((fret) => {
+      this.drawDoubleDot(fret);
+    });
+  }
+
+  drawSingleDot(fret) {
+    const center_x = this.marginLeft + this.cellWidth / 2 + (fret - 1) * this.cellWidth;
+    const center_y = this.marginTop + this.cellHeight * 2.5;
+    this.drawDot(center_x, center_y)
+  }
+
+  drawDoubleDot(fret) {
+    const center_x = this.marginLeft + this.cellWidth / 2 + (fret - 1) * this.cellWidth;
+
+    let center_y = this.marginTop + this.cellHeight * 1.5;
+    this.drawDot(center_x, center_y)
+
+    center_y = this.marginTop + this.cellHeight * 3.5;
+    this.drawDot(center_x, center_y)
+  }
+
+  drawDot(center_x, center_y) {
+    this.drawArc(center_x, center_y, this.dotRadius, this.dotColor);
+  }
+
+  drawPostion(stringNo, fretNo) {
+    const center_x = this.marginLeft + this.cellWidth * (fretNo - 0.5);
+    const center_y = this.marginTop + this.cellHeight * (stringNo - 1);
+    this.drawArc(center_x, center_y, this.postionRadius, this.postionColor);
+  }
+
+  clearPostion() {
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.drawFingerboard();
+  }
+
+  drawArc(center_x, center_y, radius, color) {
+    this.ctx.beginPath();
+    this.ctx.arc(center_x, center_y, radius, 0 * Math.PI / 180, 360 * Math.PI / 180, false);
+    this.ctx.fillStyle = color;
+    this.ctx.fill();
   }
 }
