@@ -123,12 +123,12 @@ class FingerboardImage {
   }
 
   initParams() {
-    this.cellWidth = 28;
+    this.cellWidth = 27;
     this.cellHeight = 20;
 
     this.marginTop = 20;
     this.marginBottom = 20;
-    this.marginLeft = 35;
+    this.marginLeft = 25;
     this.marginRight = 20;
 
     this.dotRadius = 5;

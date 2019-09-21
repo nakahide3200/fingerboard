@@ -7,6 +7,10 @@
   margin-bottom: 1rem;
 }
 
+.fingerboard-app .answer-area {
+  color: red;
+}
+
 .fingerboard-app .next-btn {
   cursor: pointer;
   width: 200px;
